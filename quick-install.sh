@@ -244,19 +244,29 @@ main() {
     print_info "开始一键安装SSL证书自动管理系统..."
     print_info "版本: v${VERSION}"
     print_info "仓库: $REPO_URL"
+    print_info "当前用户: $(whoami)"
+    print_info "当前目录: $(pwd)"
+    print_info "操作系统: $OSTYPE"
     echo ""
 
     # 安装步骤
+    print_info "步骤 1/5: 检查系统环境"
     check_system
+
+    print_info "步骤 2/5: 创建安装目录"
     create_install_directory
+
+    print_info "步骤 3/5: 下载项目文件"
     download_project_files
+
+    print_info "步骤 4/5: 设置文件权限"
     setup_permissions
+
+    print_info "步骤 5/5: 运行交互式安装"
     run_interactive_install
 
     show_completion_message
 }
 
-# 检查是否直接执行
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
-fi
+# 直接执行主函数
+main "$@"
