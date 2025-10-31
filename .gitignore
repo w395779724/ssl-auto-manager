@@ -1,0 +1,56 @@
+# 证书和密钥文件
+*.pem
+*.key
+*.crt
+certs/live/*
+certs/archive/*
+!certs/live/.gitkeep
+!certs/archive/.gitkeep
+
+# 日志文件
+*.log
+logs/*
+!logs/.gitkeep
+
+# 配置文件（包含敏感信息）
+config/dnsapi.conf
+config/*.conf
+
+# 临时文件
+*.tmp
+*.bak
+*.backup.*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# 编辑器文件
+.vscode/
+.idea/
+*.sublime-*
+
+# 备份文件
+*.backup.*
+
+# acme.sh 相关
+~/.acme.sh/
+
+# 锁文件
+*.lock
+*.pid
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 证书申请临时文件
+.certs/
+.acme.sh/
+
+# 系统生成的文件
+nohup.out.claude/settings.local.json

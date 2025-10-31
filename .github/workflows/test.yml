@@ -1,0 +1,69 @@
+name: Test Scripts
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-shell-scripts:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        shell: [bash, dash]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y shellcheck curl openssl socat
+
+    - name: Lint shell scripts
+      run: |
+        shellcheck install.sh
+        shellcheck scripts/*.sh
+        shellcheck quick-install.sh
+
+    - name: Test script syntax
+      run: |
+        bash -n install.sh
+        bash -n scripts/cert-manager.sh
+        bash -n scripts/install-cert.sh
+        bash -n scripts/setup-cron.sh
+        bash -n quick-install.sh
+
+    - name: Test help functions
+      run: |
+        bash scripts/cert-manager.sh help
+        bash scripts/setup-cron.sh help
+
+    - name: Check file permissions
+      run: |
+        test -x install.sh || chmod +x install.sh
+        test -x scripts/cert-manager.sh || chmod +x scripts/cert-manager.sh
+        test -x scripts/install-cert.sh || chmod +x scripts/install-cert.sh
+        test -x scripts/setup-cron.sh || chmod +x scripts/setup-cron.sh
+        test -x quick-install.sh || chmod +x quick-install.sh
+
+  test-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Check README links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        use-verbose-mode: 'yes'
+
+    - name: Validate Markdown
+      run: |
+        npm install -g markdownlint-cli
+        markdownlint README.md QUICKSTART.md CONTRIBUTING.md
